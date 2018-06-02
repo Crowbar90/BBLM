@@ -1,2 +1,1 @@
-# BBLM
-Blood Bowl League Management System
+# Blood Bowl League Management System
