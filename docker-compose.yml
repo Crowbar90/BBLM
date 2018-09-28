@@ -1,0 +1,35 @@
+version: '3.7'
+
+services:
+    db:
+        image: postgres:11
+        deploy:
+            replicas: 1
+            restart_policy:
+                condition: on-failure
+        environment:
+            POSTGRES_USER_FILE: /run/secrets/postgres-user
+            POSTGRES_PASSWORD_FILE: /run/secrets/postgres-password
+            POSTGRES_DB: bblm
+        ports:
+            - "5432:5432"
+        volumes:
+            - db-data:/var/lib/postgresql/data
+            - ./database/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+        networks:
+            - backend-network
+        secrets:
+            - postgres-user
+            - postgres-password
+
+networks:
+    backend-network:
+
+secrets:
+    postgres-user:
+        file: ./secrets/postgres-user.txt
+    postgres-password:
+        file: ./secrets/postgres-password.txt
+        
+volumes:
+    db-data:
